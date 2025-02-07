@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_16zzrg2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <bpmn:process id="CalculatePaymentProcess" name="Calculate Payment Process" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1" name="Start">
+      <bpmn:outgoing>Flow_0mvmkuy</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0mvmkuy" sourceRef="StartEvent_1" targetRef="CalculatePaymentsTask" />
+    <bpmn:endEvent id="Event_1s0e75g">
+      <bpmn:incoming>Flow_1hmzuau</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_12lpfbs" sourceRef="CalculatePaymentsTask" targetRef="Activity_0xnhw1v" />
+    <bpmn:serviceTask id="CalculatePaymentsTask" name="Calculate Payment Task" camunda:delegateExpression="#{paymentCalculationDelegate}">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0mvmkuy</bpmn:incoming>
+      <bpmn:outgoing>Flow_12lpfbs</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1hmzuau" sourceRef="Activity_0xnhw1v" targetRef="Event_1s0e75g" />
+    <bpmn:userTask id="Activity_0xnhw1v" name="UserTask">
+      <bpmn:incoming>Flow_12lpfbs</bpmn:incoming>
+      <bpmn:outgoing>Flow_1hmzuau</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CalculatePaymentProcess">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="185" y="142" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1swm1gr_di" bpmnElement="CalculatePaymentsTask">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1s0e75g_di" bpmnElement="Event_1s0e75g">
+        <dc:Bounds x="562" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1neg01c_di" bpmnElement="Activity_0xnhw1v">
+        <dc:Bounds x="410" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0mvmkuy_di" bpmnElement="Flow_0mvmkuy">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12lpfbs_di" bpmnElement="Flow_12lpfbs">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="410" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hmzuau_di" bpmnElement="Flow_1hmzuau">
+        <di:waypoint x="510" y="117" />
+        <di:waypoint x="562" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
