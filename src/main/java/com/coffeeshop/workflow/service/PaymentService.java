@@ -1,5 +1,6 @@
 package com.coffeeshop.workflow.service;
 
+import com.coffeeshop.workflow.delegate.PaymentCalculationDelegate;
 import com.coffeeshop.workflow.model.Order;
 import com.coffeeshop.workflow.model.Payment;
 import com.coffeeshop.workflow.model.Product;
@@ -12,12 +13,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Service
 public class PaymentService {
     private final Map<String, Double> totalPaidPerUser = new HashMap<>();
     private final Map<String, Double> totalAmountOwesPerUser = new HashMap<>();
     private final Map<String, Double> balances = new HashMap<>();
+    private static final Logger logger = Logger.getLogger(PaymentService.class.getName());
 
     public PaymentService() {
         try {
@@ -28,7 +31,7 @@ public class PaymentService {
                 List<Order> orders = Arrays.asList(objectMapper.readValue(new File("src/main/resources/data/orders.json"), Order[].class));
                 List<Payment> payments = Arrays.asList(objectMapper.readValue(new File("src/main/resources/data/payments.json"), Payment[].class));
 
-                // Compute total amount owed/DuePerUser
+                // Compute total amount owed per user
                 for (Order order : orders) {
                     String user = order.getUser();
                     String drink = order.getDrink();
@@ -43,14 +46,14 @@ public class PaymentService {
                             });
                 }
 
-                // Compute total amount paid
+                // Compute total amount paid per user
                 for (Payment payment : payments) {
                     String user = payment.getUser();
                     Double amount = ((Number) payment.getAmount()).doubleValue();
                     totalPaidPerUser.put(user, totalPaidPerUser.getOrDefault(user, 0.0) + amount);
                 }
 
-                // Calculate balances
+                // Calculate balances per user
                 for (String user : totalAmountOwesPerUser.keySet()) {
                     double due = totalAmountOwesPerUser.get(user);
                     double paid = totalPaidPerUser.getOrDefault(user, 0.0);
@@ -62,7 +65,7 @@ public class PaymentService {
                 throw new RuntimeException(e);
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.severe("Error during PaymentService execution: " + exception);
         }
     }
 
